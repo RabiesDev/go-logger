@@ -10,10 +10,10 @@ import (
 var (
 	Reset = []byte("\033[0m")
 
-	Bold      = []byte("\\033[1m")
+	Bold      = []byte("\033[1m")
 	Underline = []byte("\033[4m")
 
-	Black  = []byte("\\033[30m")
+	Black  = []byte("\033[30m")
 	Red    = []byte("\033[0;31m")
 	Green  = []byte("\033[0;32m")
 	Yellow = []byte("\033[33m")
@@ -52,23 +52,23 @@ type Logger struct {
 func DefaultPrefixes() Prefixes {
 	return Prefixes{
 		Info: Prefix{
-			Plain: []byte("INFO"),
+			Plain: []byte("+"),
 			Color: Cyan,
 		},
 		Warn: Prefix{
-			Plain: []byte("WARN"),
+			Plain: []byte("?"),
 			Color: Yellow,
 		},
 		Error: Prefix{
-			Plain: []byte("ERROR"),
+			Plain: []byte("!"),
 			Color: Red,
 		},
 		Fatal: Prefix{
-			Plain: []byte("FATAL"),
+			Plain: []byte("!"),
 			Color: Orange,
 		},
 		Debug: Prefix{
-			Plain: []byte("DEBUG"),
+			Plain: []byte("#"),
 			Color: Purple,
 		},
 	}

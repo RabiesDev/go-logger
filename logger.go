@@ -32,11 +32,12 @@ type Prefix struct {
 }
 
 type Prefixes struct {
+	Trace Prefix
+	Debug Prefix
 	Info  Prefix
 	Warn  Prefix
 	Error Prefix
 	Fatal Prefix
-	Debug Prefix
 }
 
 type Logger struct {
@@ -52,9 +53,17 @@ type Logger struct {
 
 func DefaultPrefixes() Prefixes {
 	return Prefixes{
+		Trace: Prefix{
+			Plain: []byte("*"),
+			Color: Cyan,
+		},
+		Debug: Prefix{
+			Plain: []byte("#"),
+			Color: Purple,
+		},
 		Info: Prefix{
 			Plain: []byte("+"),
-			Color: Cyan,
+			Color: Green,
 		},
 		Warn: Prefix{
 			Plain: []byte("?"),
@@ -67,10 +76,6 @@ func DefaultPrefixes() Prefixes {
 		Fatal: Prefix{
 			Plain: []byte("!"),
 			Color: Orange,
-		},
-		Debug: Prefix{
-			Plain: []byte("#"),
-			Color: Purple,
 		},
 	}
 }

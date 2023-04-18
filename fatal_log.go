@@ -3,7 +3,7 @@ package log
 import "fmt"
 
 func (log *Logger) Fatal(args ...interface{}) {
-	if log.Level > 4 {
+	if log.Level > 5 {
 		return
 	}
 	_ = log.Print(func() error {
@@ -15,7 +15,7 @@ func (log *Logger) Fatal(args ...interface{}) {
 }
 
 func (log *Logger) Fatalf(format string, args ...interface{}) {
-	if log.Level > 4 {
+	if log.Level > 5 {
 		return
 	}
 	_ = log.Print(func() error {

@@ -3,7 +3,7 @@ package log
 import "fmt"
 
 func (log *Logger) Error(args ...interface{}) {
-	if log.Level > 3 {
+	if log.Level > 4 {
 		return
 	}
 	_ = log.Print(func() error {
@@ -15,7 +15,7 @@ func (log *Logger) Error(args ...interface{}) {
 }
 
 func (log *Logger) Errorf(format string, args ...interface{}) {
-	if log.Level > 3 {
+	if log.Level > 4 {
 		return
 	}
 	_ = log.Print(func() error {

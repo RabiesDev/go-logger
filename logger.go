@@ -40,8 +40,9 @@ type Prefixes struct {
 }
 
 type Logger struct {
-	Prefixes Prefixes
 	Out      io.Writer
+	Prefixes Prefixes
+	Level    int
 
 	buffer *bytes.Buffer
 	mutex  *sync.RWMutex
@@ -74,10 +75,11 @@ func DefaultPrefixes() Prefixes {
 	}
 }
 
-func NewLogger(out io.Writer) *Logger {
+func NewLogger(out io.Writer, prefixes Prefixes, level int) *Logger {
 	return &Logger{
-		Prefixes: DefaultPrefixes(),
 		Out:      out,
+		Prefixes: prefixes,
+		Level:    level,
 
 		buffer: new(bytes.Buffer),
 		mutex:  new(sync.RWMutex),
@@ -87,6 +89,10 @@ func NewLogger(out io.Writer) *Logger {
 func (log *Logger) WithColor() *Logger {
 	log.color = true
 	return log
+}
+
+func (log *Logger) SetLevel(level int) {
+	log.Level = level
 }
 
 func (log *Logger) SetName(name string) {
@@ -110,28 +116,26 @@ func (log *Logger) ApplyPrefix(prefix Prefix) {
 }
 
 func (log *Logger) Println(args ...interface{}) error {
-	printer := func() error {
+	return log.Print(func() error {
 		_, err := fmt.Fprint(log.buffer, args...)
 		return err
-	}
-	return log.Print(printer)
+	})
 }
 
 func (log *Logger) Printf(format string, args ...interface{}) error {
-	printer := func() error {
+	return log.Print(func() error {
 		_, err := fmt.Fprintf(log.buffer, format, args...)
 		return err
-	}
-	return log.Print(printer)
+	})
 }
 
-func (log *Logger) Print(writer Printer) error {
+func (log *Logger) Print(printer Printer) error {
 	log.mutex.Lock()
 	defer log.mutex.Unlock()
 
 	log.buffer.Reset()
 	log.buffer.Write(Reset)
-	if err := writer(); err != nil {
+	if err := printer(); err != nil {
 		return err
 	}
 	_, err := log.Out.Write(log.buffer.Bytes())

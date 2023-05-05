@@ -9,6 +9,17 @@ func (log *Logger) Error(args ...interface{}) {
 	_ = log.Print(func() error {
 		log.ApplyPrefix(log.Prefixes.Error)
 		_, err := fmt.Fprint(log.buffer, args...)
+		return err
+	})
+}
+
+func (log *Logger) Errorln(args ...interface{}) {
+	if log.Level > 4 {
+		return
+	}
+	_ = log.Print(func() error {
+		log.ApplyPrefix(log.Prefixes.Error)
+		_, err := fmt.Fprint(log.buffer, args...)
 		log.buffer.Write([]byte("\n"))
 		return err
 	})

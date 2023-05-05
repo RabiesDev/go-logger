@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 	"sync"
 )
 
@@ -51,7 +52,7 @@ type Logger struct {
 	color  bool
 }
 
-func DefaultPrefixes() Prefixes {
+func DefaultPrefix() Prefixes {
 	return Prefixes{
 		Trace: Prefix{
 			Plain: []byte("*"),
@@ -89,6 +90,10 @@ func NewLogger(out io.Writer, prefixes Prefixes, level int) *Logger {
 		buffer: new(bytes.Buffer),
 		mutex:  new(sync.RWMutex),
 	}
+}
+
+func Default() *Logger {
+	return NewLogger(os.Stdout, DefaultPrefix(), 2)
 }
 
 func (log *Logger) WithColor() *Logger {
